@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+/* ---- Design tokens (Tailwind v4 auto-generates utilities from these) ---- */
+@theme {
+  --color-bg: #0a0b10;
+  --color-surface: #14161f;
+  --color-surface-2: #1c1f2b;
+  --color-border: #262a38;
+  --color-text: #f2f3f7;
+  --color-muted: #8b8fa3;
+  --color-gold: #f0b429;
+  --color-gold-dim: #8a6a1e;
+  --color-up: #34d399;
+  --color-down: #fb7185;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* ---- Bottom sheet entrance ---- */
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slide-up 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* ---- Terminal-style blinking cursor for the AI forecast readout ---- */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
