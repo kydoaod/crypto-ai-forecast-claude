@@ -16,7 +16,7 @@ export default function App() {
 
   const [isOnline, setIsOnline] = useState(navigator.onLine)
 
-  // --- Network status (para visible ang offline-fallback sa demo) ---
+  // --- Network status (to make offline fallback visible in the demo) ---
   useEffect(() => {
     const goOnline = () => setIsOnline(true)
     const goOffline = () => setIsOnline(false)
@@ -72,7 +72,7 @@ export default function App() {
     <div class="min-h-screen bg-bg font-body text-text">
       {!isOnline && (
         <div class="bg-gold/15 px-4 py-2 text-center text-xs font-medium text-gold">
-          ⚠ Offline mode — pinapakita ang huling na-cache na datos.
+          ⚠ Offline mode — showing the last cached data.
         </div>
       )}
 
@@ -92,14 +92,14 @@ export default function App() {
 
         {!loading && loadError && (
           <div class="rounded-2xl border border-down/40 bg-surface p-4 text-sm">
-            <p class="text-down">Hindi na-load ang prices.</p>
+            <p class="text-down">Unable to load prices.</p>
             <p class="mt-1 text-muted">{loadError}</p>
             <button
               type="button"
               onClick={loadCoins}
               class="mt-3 rounded-lg border border-gold/40 px-3 py-1.5 text-xs text-gold active:bg-gold/10"
             >
-              Subukan ulit
+              Retry
             </button>
           </div>
         )}

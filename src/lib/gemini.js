@@ -1,31 +1,30 @@
 // Google Gemini API (Generative Language API).
 // Docs: https://ai.google.dev/gemini-api/docs
 //
-// SECURITY NOTE (importante para sa demo): kinakailangan dito ay direktang
-// fetch mula sa browser para mabilis at walang backend/database — pero
-// ibig sabihin VISIBLE ang API key sa browser network tab/bundle. Sapat na
-// ito para sa isang demo, pero sa production, dapat itago ang key sa likod
-// ng isang maliit na backend/proxy (hal. Cloudflare Worker) bago ilabas.
-const GEMINI_MODEL = 'gemini-2.5-flash' // mabilis at libre-tier friendly
+// SECURITY NOTE (important for demo): this implementation fetches from the browser
+// directly for speed and zero backend/database. That means the API key is visible
+// in browser network requests/bundles. This is acceptable for a demo, but in
+// production the key should live behind a small backend/proxy (e.g. Cloudflare Worker).
+const GEMINI_MODEL = 'gemini-2.5-flash' // fast and free-tier friendly
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 
 function buildPrompt(coinName, coinSymbol) {
-  return `Ikaw ay isang crypto market analyst. Sumagot ka PARA SA ${coinName} (${coinSymbol}).
+  return `You are a crypto market analyst. Answer FOR ${coinName} (${coinSymbol}).
 
-Sumagot ka LAMANG ng isang valid na JSON object — walang paunang salita, walang markdown, walang code fences. Eksaktong format:
-{"sentiment": "Bullish", "forecast": "dalawang pangungusap na Taglish market forecast at sentiment"}
+Respond ONLY with a valid JSON object — no leading text, no markdown, no code fences. Exact format:
+{"sentiment": "Bullish", "forecast": "two-sentence market forecast with sentiment"}
 
-Ang "sentiment" ay dapat isa lamang sa: "Bullish", "Bearish", o "Neutral".
-Ang "forecast" ay eksaktong 2 pangungusap, parang mensahe mula sa isang trader sa kaibigan — direkta at madaling intindihin, walang disclaimer.`
+The "sentiment" field must be one of: "Bullish", "Bearish", or "Neutral".
+The "forecast" field must be exactly 2 sentences, like a message from a trader to a friend — direct and easy to understand, with no disclaimer.`
 }
 
 /**
- * Humingi ng AI-generated market forecast + sentiment para sa isang coin.
+ * Request an AI-generated market forecast + sentiment for a coin.
  * Returns: { sentiment: 'Bullish' | 'Bearish' | 'Neutral', forecast: string }
  */
 export async function getForecast(coinName, coinSymbol) {
   if (!API_KEY) {
-    throw new Error('Walang VITE_GEMINI_API_KEY. Lagay ito sa .env file (tingnan ang .env.example).')
+    throw new Error('Missing VITE_GEMINI_API_KEY. Add it to your .env file (see .env.example).')
   }
 
   const res = await fetch(
@@ -44,8 +43,8 @@ export async function getForecast(coinName, coinSymbol) {
           },
         ],
         generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 200,
+          temperature: 0.0,
+          maxOutputTokens: 1024,
         },
       }),
     }
@@ -63,7 +62,7 @@ export async function getForecast(coinName, coinSymbol) {
 }
 
 function parseForecastResponse(rawText) {
-  // Linisin kung sakaling nilagyan ng model ng ```json code fences.
+  // Clean up in case the model wraps the JSON with ```json code fences.
   const cleaned = rawText.replace(/```json|```/g, '').trim()
 
   try {
@@ -73,14 +72,14 @@ function parseForecastResponse(rawText) {
       : 'Neutral'
     return {
       sentiment,
-      forecast: parsed.forecast || 'Walang malinaw na sagot na natanggap mula sa AI.',
+      forecast: parsed.forecast || 'No clear answer was received from the AI.',
     }
   } catch {
-    // Fallback kung sakaling hindi clean JSON ang ibinalik ng model —
-    // ipakita pa rin ang raw text sa user kesa mag-crash ang UI.
+    // Fallback if the model does not return clean JSON —
+    // show the raw text instead of letting the UI crash.
     return {
       sentiment: 'Neutral',
-      forecast: cleaned || 'Walang sagot na natanggap mula sa AI.',
+      forecast: cleaned || 'No response was received from the AI.',
     }
   }
 }

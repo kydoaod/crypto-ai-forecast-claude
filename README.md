@@ -1,42 +1,42 @@
 # Crypto AI Forecaster
 
-Demo PWA — Preact + Vite + Tailwind v4. Nagpapakita ng live top-5 crypto prices
-(CoinGecko) at AI-generated 2-sentence market sentiment forecast (Google Gemini)
-kapag pinindot ang isang coin. Walang database/backend — pure client-side fetch.
+Demo PWA — Preact + Vite + Tailwind v4. Displays live top-5 crypto prices
+(CoinGecko) and AI-generated 2-sentence market sentiment forecasts (Google Gemini)
+when a coin is tapped. No database/backend — pure client-side fetch.
 
 ## Setup
 
 ```bash
 npm install
 cp .env.example .env
-# i-edit ang .env, ilagay ang sariling GEMINI_API_KEY mo
+# edit .env and add your own GEMINI_API_KEY
 npm run dev
 ```
 
-Buksan ang URL na lalabas sa terminal (default `http://localhost:5173`).
+Open the URL shown in the terminal (default `http://localhost:5173`).
 
-## Build para sa production / PWA install testing
+## Build for production / PWA install testing
 
 ```bash
 npm run build
 npm run preview
 ```
 
-`npm run preview` ang dapat gamitin para subukan ang "Add to Home Screen" at
-offline mode nang totoo — kasi naka-on lang ang service worker sa production
-build (o sa dev gamit ang `devOptions.enabled: true` na nakalagay na sa
+Use `npm run preview` to test Add to Home Screen and
+real offline mode — the service worker is only enabled in production
+builds (or in dev when `devOptions.enabled: true` is enabled in
 `vite.config.js`).
 
-## Saan kunin ang Gemini API key
+## Where to get the Gemini API key
 
-1. Pumunta sa https://aistudio.google.com/app/apikey
-2. Mag-sign in gamit ang Google account, gumawa ng API key (libre).
-3. I-paste sa `.env` bilang `VITE_GEMINI_API_KEY`.
+1. Go to https://aistudio.google.com/app/apikey
+2. Sign in with a Google account and create an API key (free).
+3. Paste it in `.env` as `VITE_GEMINI_API_KEY`.
 
 ## Tech stack
 
 - Preact + Vite
-- Tailwind CSS v4 (via `@tailwindcss/vite`, walang separate config file kailangan)
+- Tailwind CSS v4 (via `@tailwindcss/vite`, no separate config file needed)
 - `vite-plugin-pwa` — auto manifest + service worker + offline app-shell fallback
 - CoinGecko Public API (free, no key) — top 5 coins by market cap
 - Google Gemini API (`gemini-2.5-flash`) — AI sentiment forecast

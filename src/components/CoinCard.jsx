@@ -7,8 +7,7 @@ function formatPrice(price) {
       maximumFractionDigits: 2,
     })
   }
-  // Para sa coins na under $1 (hal. fractions of a cent), kailangan ng mas
-  // marami pang decimal places para makita talaga ang value.
+  // For coins under $1 (e.g. fractions of a cent), show more decimals so the value is visible.
   return `$${price.toPrecision(4)}`
 }
 

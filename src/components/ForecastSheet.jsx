@@ -25,20 +25,20 @@ export default function ForecastSheet({ coin, loading, error, result, onClose, o
           <button
             type="button"
             onClick={onClose}
-            aria-label="Isara"
+            aria-label="Close"
             class="rounded-full border border-border p-2 text-muted active:bg-surface-2"
           >
             ✕
           </button>
         </div>
 
-        {/* "Terminal" readout panel — signature element ng app */}
+        {/* "Terminal" readout panel — signature app element */}
         <div class="min-h-[150px] rounded-2xl border border-gold/30 bg-bg p-4">
           {loading && (
             <div class="font-mono text-sm text-muted">
               <p class="mb-2 text-gold">$ generating_forecast --coin="{coin.symbol}"</p>
               <p>
-                Kinukwenta ng AI ang sentiment<span class="cursor-blink">▍</span>
+                AI is calculating sentiment<span class="cursor-blink">▍</span>
               </p>
             </div>
           )}
@@ -52,7 +52,7 @@ export default function ForecastSheet({ coin, loading, error, result, onClose, o
                 onClick={onRetry}
                 class="rounded-lg border border-gold/40 px-3 py-1.5 text-xs text-gold active:bg-gold/10"
               >
-                Subukan ulit
+                Retry
               </button>
             </div>
           )}
@@ -73,7 +73,7 @@ export default function ForecastSheet({ coin, loading, error, result, onClose, o
         </div>
 
         <p class="mt-3 text-center text-[11px] text-muted">
-          AI-generated lang ito — hindi ito financial advice.
+          AI-generated only — this is not financial advice.
         </p>
       </div>
     </div>

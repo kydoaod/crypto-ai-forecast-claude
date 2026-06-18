@@ -9,14 +9,14 @@ export default defineConfig({
     preact(),
     tailwindcss(),
     VitePWA({
-      // 'autoUpdate' = bagong build, auto na mag-i-install ang updated service worker
+      // 'autoUpdate' = when a new build is available, the updated service worker installs automatically
       registerType: 'autoUpdate',
       includeAssets: ['apple-touch-icon.png'],
 
       manifest: {
         name: 'Crypto AI Forecaster',
         short_name: 'CryptoAI',
-        description: 'Live top-5 crypto prices na may AI-generated market sentiment forecast.',
+        description: 'Live top-5 crypto prices with AI-generated market sentiment forecasts.',
         theme_color: '#0a0b10',
         background_color: '#0a0b10',
         display: 'standalone',
@@ -34,24 +34,24 @@ export default defineConfig({
         ],
       },
 
-      // Pinapayagan din ang PWA features (manifest + SW) habang `npm run dev`,
-      // para makapag-test agad ng "Add to Home Screen" kahit dev server lang.
+      // Allow PWA features (manifest + SW) during `npm run dev`,
+      // so Add to Home Screen can be tested while running the dev server.
       devOptions: {
         enabled: true,
         type: 'module',
       },
 
       workbox: {
-        // Pag-navigate offline (hal. binuksan ulit ang app na walang internet),
-        // ibibigay ang naka-cache na app shell (index.html) sa lugar ng native
-        // browser offline error. Ito ang "offline fallback" ng PWA.
+        // Offline navigation (e.g. reopening the app without internet)
+        // returns the cached app shell (index.html) instead of the native
+        // browser offline error. This is the PWA offline fallback.
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//],
 
         runtimeCaching: [
           {
-            // Live prices: i-try muna ang network (para sariwa), pero kung
-            // walang internet, gamitin ang pinaka-huling cached response.
+            // Live prices: try network first (for freshness), but if
+            // offline use the most recent cached response.
             urlPattern: /^https:\/\/api\.coingecko\.com\/.*/i,
             handler: 'NetworkFirst',
             options: {
@@ -62,7 +62,7 @@ export default defineConfig({
             },
           },
           {
-            // AI forecasts dapat laging fresh/live - hindi dapat i-cache.
+            // AI forecasts should always be fresh/live - do not cache.
             urlPattern: /^https:\/\/generativelanguage\.googleapis\.com\/.*/i,
             handler: 'NetworkOnly',
           },
