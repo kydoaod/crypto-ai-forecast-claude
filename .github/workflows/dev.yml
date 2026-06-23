@@ -1,0 +1,32 @@
+name: Deploy Next.js App
+
+on:
+  push:
+    branches:
+      - main # Mag-ttrigger tuwing may push sa main branch
+
+jobs:
+  deploy:
+    runs-on: self-hosted # Ito ang magsasabi sa GitHub na sa server mo ito patatakbuhin
+    
+    steps:
+      - name: Kumuha ng latest code
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Next.js App
+        run: npm run build
+
+      - name: Start or Restart sa Port 6000
+        run: |
+          # I-check kung tumatakbo na ang app sa PM2
+          pm2 describe nextjs-app > /dev/null
+          
+          # Kung tumatakbo na, i-restart. Kung hindi pa, i-start.
+          if [ $? -eq 0 ]; then
+            PORT=6000 pm2 restart nextjs-app
+          else
+            PORT=6000 pm2 start npm --name "nextjs-app" -- start
+          fi
