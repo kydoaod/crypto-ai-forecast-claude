@@ -3,11 +3,11 @@ name: Deploy Next.js App
 on:
   push:
     branches:
-      - main # Mag-ttrigger tuwing may push sa main branch
+      - main
 
 jobs:
   deploy:
-    runs-on: self-hosted # Ito ang magsasabi sa GitHub na sa server mo ito patatakbuhin
+    runs-on: self-hosted
     
     steps:
       - name: Kumuha ng latest code
@@ -21,12 +21,9 @@ jobs:
 
       - name: Start or Restart sa Port 6000
         run: |
-          # I-check kung tumatakbo na ang app sa PM2
-          pm2 describe nextjs-app > /dev/null
-          
-          # Kung tumatakbo na, i-restart. Kung hindi pa, i-start.
+          pm2 describe crypto-ai-forecast-claude > /dev/null
           if [ $? -eq 0 ]; then
-            PORT=6000 pm2 restart nextjs-app
+            PORT=6000 pm2 restart crypto-ai-forecast-claude
           else
-            PORT=6000 pm2 start npm --name "nextjs-app" -- start
+            PORT=6000 pm2 start npm --name "crypto-ai-forecast-claude" -- start
           fi
