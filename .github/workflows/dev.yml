@@ -21,9 +21,9 @@ jobs:
       - name: Start or Restart sa Port 6000
         run: |
           if pm2 describe crypto-ai-forecast-claude > /dev/null; then
-            echo "Tumaktakbo na ang app, ire-restart na lang..."
-            PORT=6000 pm2 restart crypto-ai-forecast-claude
+            echo "App is running, restarting..."
+            pm2 restart crypto-ai-forecast-claude
           else
-            echo "First time deployment! "
-            PORT=6000 pm2 start npm --name "crypto-ai-forecast-claude" -- start
+            echo "First time deployment!"
+            pm2 serve dist 6000 --name "crypto-ai-forecast-claude" --spa
           fi
